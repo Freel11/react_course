@@ -1,0 +1,23 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --button-background-color: #05061a;
+  --side-bar-width: 20vw;
+  --top-margin: 5vh;
+}
+
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font: 'sans-serif';
+  font-size: 16px;
+  background-color: #fff;
+}

@@ -1,0 +1,22 @@
+.button {
+  padding: 1rem 2rem;
+  font-size: 1.25rem;
+  background-color: var(--button-background-color);
+  color: #fff;
+  border-radius: 0.5rem;
+  font-weight: 500;
+  transition: 0.1s;
+}
+
+.button:not(.alt):hover {
+  opacity: 0.75;
+}
+
+.button.alt {
+  background-color: transparent;
+  color: gray;
+}
+
+.button.alt:hover {
+  color: #c31d1d;
+}
