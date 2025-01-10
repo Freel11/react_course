@@ -1,4 +1,8 @@
+import { useState } from "react";
+
 export default function Signup() {
+  const [passwordsAreNotEqual, setPasswordsAreNotEqual] = useState(false);
+
   function handleSubmit(e) {
     e.preventDefault();
 
@@ -6,6 +10,13 @@ export default function Signup() {
     const acquisitionChannel = fd.getAll("acquisition");
     const data = Object.fromEntries(fd.entries());
     data.acquisition = acquisitionChannel;
+
+    if (data.password !== data["confirm-password"]) {
+      setPasswordsAreNotEqual(true);
+      return;
+    }
+
+    setPasswordsAreNotEqual(false);
     console.log(data);
   }
   return (
@@ -15,13 +26,19 @@ export default function Signup() {
 
       <div className="control">
         <label htmlFor="email">Email</label>
-        <input id="email" type="email" name="email" />
+        <input id="email" type="email" name="email" required />
       </div>
 
       <div className="control-row">
         <div className="control">
           <label htmlFor="password">Password</label>
-          <input id="password" type="password" name="password" />
+          <input
+            id="password"
+            type="password"
+            name="password"
+            required
+            minLength={6}
+          />
         </div>
 
         <div className="control">
@@ -31,6 +48,9 @@ export default function Signup() {
             type="password"
             name="confirm-password"
           />
+          <div className="control-error">
+            {passwordsAreNotEqual && <p>Passwords must match</p>}
+          </div>
         </div>
       </div>
 
@@ -89,8 +109,13 @@ export default function Signup() {
 
       <div className="control">
         <label htmlFor="terms-and-conditions">
-          <input type="checkbox" id="terms-and-conditions" name="terms" />I
-          agree to the terms and conditions
+          <input
+            type="checkbox"
+            id="terms-and-conditions"
+            name="terms"
+            required
+          />
+          I agree to the terms and conditions
         </label>
       </div>
 
