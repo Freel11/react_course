@@ -14,7 +14,7 @@ function App() {
           <Meals />
           <Cart />
           <Checkout />
-        </CartContextProvider>
+        </CartContextProvider>  
       </UserProgressContextProvider>
     </>
   );
