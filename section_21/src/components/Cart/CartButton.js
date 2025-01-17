@@ -3,8 +3,8 @@ import classes from "./CartButton.module.css";
 import { cartActions } from "../../store/cart";
 
 const CartButton = (props) => {
-  const showCart = useSelector((state) => state.showCart);
-  const cart = useSelector((state) => state.cart);
+  const showCart = useSelector((state) => state.cart.showCart);
+  const cart = useSelector((state) => state.cart.cart);
   const dispatch = useDispatch();
 
   const handleShowCart = () => {
