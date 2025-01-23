@@ -31,9 +31,12 @@ export async function loader({ request, params }) {
  * @param {{params}} data
  * @returns
  */
-export async function action({ params }) {
+export async function action({ params, request }) {
   const response = await fetch(
-    `http://localhost:8080/events/${params.eventId}`
+    `http://localhost:8080/events/${params.eventId}`,
+    {
+      method: request.method,
+    }
   );
 
   if (!response.ok) {
