@@ -1,10 +1,59 @@
+import { Await, redirect, useRouteLoaderData } from "react-router-dom";
 import EventItem from "../components/EventItem";
-import { redirect, useRouteLoaderData } from "react-router-dom";
+import EventList from "../components/EventsList";
+import { Suspense } from "react";
 
 export default function EventDetailPage() {
-  const data = useRouteLoaderData("event-detail");
+  const { event, events } = useRouteLoaderData("event-detail");
 
-  return <EventItem event={data.event} />;
+  return (
+    <>
+      <Suspense
+        fallback={
+          <p style={{ textAlign: "center", color: "red" }}>Loading Event...</p>
+        }
+      >
+        <Await resolve={event}>
+          {(loadedEvent) => <EventItem event={loadedEvent} />}
+        </Await>
+      </Suspense>
+      <Suspense
+        fallback={
+          <p style={{ textAlign: "center", color: "red" }}>Loading Events...</p>
+        }
+      >
+        <Await resolve={events}>
+          {(loadedEvents) => <EventList events={loadedEvents} />}
+        </Await>
+      </Suspense>
+    </>
+  );
+}
+
+async function loadEvent(id) {
+  const response = await fetch(`http://localhost:8080/events/${id}`);
+
+  if (!response.ok) {
+    throw new Response(JSON.stringify({ message: "Could not fetch Event." }), {
+      status: 500,
+    });
+  }
+
+  const resData = await response.json();
+  return resData.event;
+}
+
+async function loadEvents() {
+  const response = await fetch("http://localhost:8080/events");
+
+  if (!response.ok) {
+    throw new Response(JSON.stringify({ message: "Could not fetch events." }), {
+      status: 500,
+    });
+  } else {
+    const resData = await response.json();
+    return resData.events;
+  }
 }
 
 /**
@@ -13,17 +62,12 @@ export default function EventDetailPage() {
  * @returns
  */
 export async function loader({ request, params }) {
-  const response = await fetch(
-    `http://localhost:8080/events/${params.eventId}`
-  );
+  const id = params.eventId;
 
-  if (!response.ok) {
-    throw new Response(JSON.stringify({ message: "Could not fetch Event." }), {
-      status: 500,
-    });
-  }
-
-  return response;
+  return {
+    event: await loadEvent(id),
+    events: loadEvents(),
+  };
 }
 
 /**
